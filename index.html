@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tela de Login</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-image: url('fundo.jpg'); /* coloque sua imagem aqui */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.9); /* fundo branco semi-transparente */
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 350px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    form label {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    form input {
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    form button {
+      margin-top: 25px;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    form button:disabled {
+      background-color: #888;
+      cursor: not-allowed;
+    }
+
+    .erro {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .senha-toggle {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #555;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .lembrar {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .lembrar input {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Bem Vindo<br><span>ao</span><br><img src="logo.png" alt="Logo" width="150"></h2>
+
+    <form onsubmit="return validarLogin()">
+      <label for="login">Login</label>
+      <input type="text" id="login" placeholder="Ex: 0001098764115" />
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" placeholder="Ex: Ni1098764115@" />
+      <div class="senha-toggle" onclick="alternarSenha()">Mostrar/ocultar senha</div>
+
+      <div class="lembrar">
+        <input type="checkbox" id="lembrarLogin" /> <label for="lembrarLogin">Lembrar login</label>
+      </div>
+
+      <button type="submit" id="btnEntrar">Entrar</button>
+      <div class="erro" id="mensagemErro"></div>
+    </form>
+  </div>
+
+  <script>
+    const usuariosValidos = ["0000108899765", "0000110975488", "0000109833466"];
+    const senhaCorreta = "entrealunos123";
+    let tentativas = 0;
+    let bloqueado = false;
+    let tempoRestante = 30;
+    let intervalo;
+
+    window.onload = () => {
+      const loginSalvo = localStorage.getItem("loginSalvo");
+      if (loginSalvo) {
+        document.getElementById("login").value = loginSalvo;
+        document.getElementById("lembrarLogin").checked = true;
+      }
+    };
+
+    function validarLogin() {
+      if (bloqueado) return false;
+
+      const usuario = document.getElementById("login").value.trim();
+      const senha = document.getElementById("senha").value;
+      const lembrar = document.getElementById("lembrarLogin").checked;
+      const mensagemErro = document.getElementById("mensagemErro");
+      const botao = document.getElementById("btnEntrar");
+
+      if (usuariosValidos.includes(usuario) && senha === senhaCorreta) {
+        if (lembrar) {
+          localStorage.setItem("loginSalvo", usuario);
+        } else {
+          localStorage.removeItem("loginSalvo");
+        }
+        window.location.href = "home.html";
+        return false;
+      } else {
+        tentativas++;
+        mensagemErro.textContent = `Usuário ou senha incorretos. Tentativa ${tentativas} de 3.`;
+
+        if (tentativas >= 3) {
+          botao.disabled = true;
+          bloqueado = true;
+          mensagemErro.textContent = `Muitas tentativas! Tente novamente em ${tempoRestante} segundos.`;
+
+          intervalo = setInterval(() => {
+            tempoRestante--;
+            if (tempoRestante > 0) {
+              mensagemErro.textContent = `Aguarde ${tempoRestante} segundos para tentar novamente.`;
+            } else {
+              clearInterval(intervalo);
+              botao.disabled = false;
+              tentativas = 0;
+              tempoRestante = 30;
+              mensagemErro.textContent = "";
+              bloqueado = false;
+            }
+          }, 1000);
+        }
+        return false;
+      }
+    }
+
+    function alternarSenha() {
+      const campoSenha = document.getElementById("senha");
+      campoSenha.type = campoSenha.type === "password" ? "text" : "password";
+    }
+  </script>
+</body>
+</html>
