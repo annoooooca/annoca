@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Entre Alunos</title>
+  <style>
+    /* Reset e base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #0e2c43;
+      color: white;
+      text-align: center;
+      padding: 1em;
+      font-size: 1em;
+      z-index: 1000;
+    }
+
+    nav {
+      position: fixed;
+      top: 40px;
+      width: 100%;
+      background-color: #1e4e73;
+      text-align: center;
+      z-index: 999;
+    }
+
+    nav a {
+      color: white;
+      padding: 1em;
+      display: inline-block;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background-color: #276d9e;
+    }
+
+    .main-content {
+      padding: 140px 20px 40px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .chat-container {
+      display: flex;
+      height: 600px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .chat-list {
+      width: 80px;
+      background: #f1f1f1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      gap: 10px;
+    }
+
+    .chat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ddd;
+      cursor: pointer;
+    }
+
+    .chat-icon.active {
+      background: #7c9dff;
+    }
+
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      background: #4a90e2;
+      color: white;
+      padding: 15px;
+      font-size: 18px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .message-row {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+
+    .message {
+      background: #e6f0ff;
+      padding: 10px 15px;
+      border-radius: 20px;
+      max-width: 70%;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      background: #fafafa;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+    }
+
+    .chat-input button {
+      margin-left: 10px;
+      padding: 10px 15px;
+      border: none;
+      background: #4a90e2;
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h3>Entre Alunos</h3>
+  </header>
+
+  <nav>
+    <a href="#" onclick="mostrar('forum', this)" class="active">Fórum</a>
+    <a href="#" onclick="mostrar('calendario', this)">Calendário</a>
+    <a href="#" onclick="mostrar('chapa', this)">Chapa</a>
+  </nav>
+
+  <div class="main-content">
+    <div id="forum" class="section active">
+      <div class="chat-container">
+        <div class="chat-list">
+          <div class="chat-icon active" onclick="mudarChat('chat1', this)"></div>
+          <div class="chat-icon" onclick="mudarChat('chat2', this)"></div>
+          <div class="chat-icon" onclick="mudarChat('chat3', this)"></div>
+          <div class="chat-icon" onclick="mudarChat('chat4', this)"></div>
+        </div>
+        <div class="chat-area">
+          <div class="chat-header" id="chatTitulo">Chat 1</div>
+          <div class="chat-messages" id="chatBox"></div>
+          <div class="chat-input">
+            <input type="text" id="mensagemInput" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter') enviarMensagem()">
+            <button onclick="enviarMensagem()">➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!------ Calendário ------>
+    <div id="calendario" class="section">
+    
+      <!DOCTYPE html>
+      <html lang="pt-br">
+      <head>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+          html, body {
+            margin: 0;
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+          }
+      
+          .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+          }
+      
+          .topo {
+            flex: 0.3;
+            background-color: steelblue;
+            color: white;
+          }
+      
+          .baixo {
+            flex: 2.65;
+            background-color: snow;
+            color: black;
+          }
+
+          .caixa2 {
+            background-color: white;
+            padding: 1px;
+            width: 400px;
+            margin: 20px auto;
+            border: 2px solid black;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+          }
+      
+          h1, h4 {
+            margin: 0.5em 0;
+          }
+      
+          .home-icon a {
+            display: block;
+            width: 40px;
+            height: 40px;
+            background-image: url('icone-home.png'); /* substitua com o ícone real */
+            background-size: cover;
+            margin: 0 auto;
+          }
+      
+          #meses span {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 5px;
+          }
+      
+          #meses span:hover {
+            background-color: lightgray;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="topo">
+            <br>
+            <center>
+              <h4 id="meses">
+                <span data-month="1">Fevereiro</span> &nbsp;
+                <span data-month="2">Março</span> &nbsp;
+                <span data-month="3">Abril</span> &nbsp;
+                <span data-month="4">Maio</span> &nbsp;
+                <span data-month="5">Junho</span> &nbsp;
+                <span data-month="7">Agosto</span> &nbsp;
+                <span data-month="8">Setembro</span> &nbsp;
+                <span data-month="9">Outubro</span> &nbsp;
+                <span data-month="10">Novembro</span>
+              </h4>
+            </center>
+          </div>
+      
+          <div class="baixo">
+            <div class="caixa2">
+              <center><h4>Clique em cada mês para saber os eventos</h4></center>
+            </div>
+            <div id="calendario" style="background-color:white; border-radius: 10px; width: 90%; max-width: 600px; margin: 20px auto; padding: 20px;"></div>
+            <div class="home-icon">
+            </div>
+          </div>
+        </div>
+      
+        <script>
+          const meses = document.getElementById('meses');
+          const calendarioEl = document.getElementById('calendario');
+      
+          meses.addEventListener('click', (e) => {
+            const month = e.target.dataset.month;
+            if (month !== undefined) {
+              const year = new Date().getFullYear();
+              mostrarCalendario(parseInt(month), year);
+            }
+          });
+      
+          function mostrarCalendario(mes, ano) {
+            const diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            const primeiroDia = new Date(ano, mes, 1).getDay();
+            const totalDias = new Date(ano, mes + 1, 0).getDate();
+      
+            let html = '<table style="width: 100%; text-align: center; border-collapse: collapse;">';
+            html += '<tr>' + diasSemana.map(d => `<th>${d}</th>`).join('') + '</tr><tr>';
+      
+            for (let i = 0; i < primeiroDia; i++) {
+              html += '<td></td>';
+            }
+      
+            for (let dia = 1; dia <= totalDias; dia++) {
+              const data = `${ano}-${(mes+1).toString().padStart(2, '0')}-${dia.toString().padStart(2, '0')}`;
+      
+              const temEvento = (mes === 4 && dia === 15); // Evento fictício: 15 de Maio
+      
+              html += `<td style="padding: 10px; border: 1px solid #ccc; ${temEvento ? 'background-color: lightgreen;' : ''}" title="${temEvento ? 'Evento: Feira de Ciências' : ''}">${dia}</td>`;
+      
+              if ((primeiroDia + dia) % 7 === 0) {
+                html += '</tr><tr>';
+              }
+            }
+      
+            html += '</tr></table>';
+            calendarioEl.innerHTML = html;
+          }
+        </script>
+      </body>
+      </html>
+  </div>
+    
+
+    <div id="chapa" class="section">
+      <h2>Chapa</h2>
+      <p>Conheça as chapas concorrentes e suas propostas.</p>
+    </div>
+  </div>
+
+  <script>
+    const chats = {
+      chat1: [],
+      chat2: [],
+      chat3: [],
+      chat4: []
+    };
+
+    const avatares = {
+      chat1: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV9r4zvgWrXNv1e7lbVa8re3VyaLTjT-m53w&s',
+      chat2: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRiN_FCo7Rrj1SWNz0Zhb_U27BF7FadLfOww&s',
+      chat3: 'https://i.pinimg.com/564x/ce/a6/0b/cea60ba1c7708d5060d2ffb0bbfa38cc.jpg',
+      chat4: 'https://adimax.com.br/wp-content/uploads/2022/05/cuidados-filhote-de-cachorro.jpg',
+    };
+
+    let chatAtual = 'chat1';
+
+    function mostrar(secaoId, link) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(secaoId).classList.add('active');
+      document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+      link.classList.add('active');
+    }
+
+    function mudarChat(id, el) {
+      document.querySelectorAll('.chat-icon').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+      chatAtual = id;
+      document.getElementById('chatTitulo').textContent = `Chat ${id.replace('chat', '')}`;
+      atualizarMensagens();
+    }
+
+    function enviarMensagem() {
+      const input = document.getElementById('mensagemInput');
+      const texto = input.value.trim();
+      if (!texto) return;
+      chats[chatAtual].push(texto);
+      input.value = '';
+      atualizarMensagens();
+    }
+
+    function atualizarMensagens() {
+      const box = document.getElementById('chatBox');
+      box.innerHTML = '';
+      chats[chatAtual].forEach(msg => {
+        const row = document.createElement('div');
+        row.classList.add('message-row');
+
+        const avatar = document.createElement('img');
+        avatar.src = avatares[chatAtual];
+        avatar.classList.add('avatar');
+
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message');
+        msgDiv.textContent = msg;
+
+        row.appendChild(avatar);
+        row.appendChild(msgDiv);
+        box.appendChild(row);
+      });
+      box.scrollTop = box.scrollHeight;
+    }
+
+    atualizarMensagens();
+  </script>
+</body>
+</html>
