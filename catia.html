@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Espelhamento ao Vivo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 80px 20px;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 12px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    }
+
+    .espelho {
+      margin-top: 30px;
+      width: 100%;
+      max-width: 400px;
+      padding: 15px;
+      background-color: #fff;
+      border-left: 4px solid #007BFF;
+      border-radius: 6px;
+      font-size: 18px;
+      color: #333;
+      min-height: 30px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Digite algo:</h1>
+
+  <!-- Caixa de texto -->
+  <input type="text" id="entrada" placeholder="Digite aqui..." oninput="espelharTexto()">
+
+  <!-- Texto espelhado -->
+  <div class="espelho" id="saida">—</div>
+
+  <script>
+    function espelharTexto() {
+      const texto = document.getElementById("entrada").value;
+      const saida = document.getElementById("saida");
+      saida.textContent = texto || "—";
+    }
+  </script>
+
+</body>
+</html>
