@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Entre Alunos</title>
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: sans-serif; display: flex; min-height: 100vh; background: #f0f2f5; }
+    nav { width: 220px; background: #1e4e73; color: white; padding-top: 20px; }
+    nav ul { list-style:none; }
+    nav li { margin: 15px 0; }
+    nav a { color: white; text-decoration: none; font-size: 1.1em; padding: 10px 20px; display: block; transition: background 0.2s; }
+    nav a.active, nav a:hover { background: #276d9e; border-radius: 4px; }
+    main { flex:1; padding: 20px; margin-left: 220px; }
+    header { background: #0e2c43; color:white; padding: 20px; text-align: center; font-size: 1.6em; }
+    .section { display: none; margin-top: 20px; }
+    .section.active { display: block; }
+
+    /* estilos chat */
+    .chat-container { display: flex; flex-direction: column; height: 600px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    .chat-header { background: #4a90e2; color: white; padding: 15px; text-align: center; font-size: 1.2em; }
+    .chat-messages { flex:1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap:10px; }
+    .message { background:#e6f0ff; padding:10px 15px; border-radius:12px; max-width:70%; align-self: flex-start; }
+    .message.self { background:#d1e7dd; align-self: flex-end; }
+    .meta { font-size:0.75em; color:#666; margin-top:2px; }
+    .chat-input { display: flex; border-top:1px solid #ddd; padding:10px; background:#fafafa; }
+    .chat-input input { flex:1; padding:10px; border:1px solid #ccc; border-radius:20px; }
+    .chat-input button { margin-left:10px; padding:10px 15px; background:#4a90e2;color:white; border:none;border-radius:50%; cursor:pointer; }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><a href="#" data-sec="forum" class="active">Fórum</a></li>
+      <li><a href="#" data-sec="calendario">Calendário</a></li>
+      <li><a href="#" data-sec="chapa">Chapa</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header>Entre Alunos</header>
+
+    <div id="forum" class="section active">
+      <div class="chat-container">
+        <div class="chat-header" id="chatTitulo">Fórum Geral</div>
+        <div class="chat-messages" id="chatBox"></div>
+        <div class="chat-input">
+          <input type="text" id="mensagemInput" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter') enviarMensagem()">
+          <button onclick="enviarMensagem()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="calendario" class="section">
+      <h2>📅 Calendário</h2>
+      <p>Em breve: eventos, prazos e atividades acadêmicas.</p>
+    </div>
+
+    <div id="chapa" class="section">
+      <h2>🏛️ Chapa</h2>
+      <p>Conheça as chapas concorrentes e suas propostas.</p>
+    </div>
+  </main>
+
+  <script>
+    // navegação
+    document.querySelectorAll('nav a').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('nav a').forEach(x => x.classList.remove('active'));
+        a.classList.add('active');
+        const sec = a.getAttribute('data-sec');
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(sec).classList.add('active');
+      });
+    });
+
+    // fórum
+    let nomeUsuario = localStorage.getItem('nomeUsuario') || '';
+    if (!nomeUsuario) {
+      nomeUsuario = prompt("Digite seu nome para participar do fórum:") || "Anônimo";
+      localStorage.setItem('nomeUsuario', nomeUsuario);
+    }
+
+    const localKey = 'forumMensagens';
+    let mensagens = JSON.parse(localStorage.getItem(localKey)) || [];
+    const chatBox = document.getElementById('chatBox');
+
+    function mostrarMensagens() {
+      chatBox.innerHTML = '';
+      mensagens.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = 'message' + (msg.de === nomeUsuario ? ' self' : '');
+        div.innerHTML = `<strong>${msg.de}</strong> <span class="meta">${msg.hora}</span><br>${msg.texto}`;
+        chatBox.appendChild(div);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function enviarMensagem() {
+      const input = document.getElementById('mensagemInput');
+      const texto = input.value.trim();
+      if (!texto) return;
+      const agora = new Date();
+      const hora = agora.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+      mensagens.push({ de: nomeUsuario, hora, texto });
+      localStorage.setItem(localKey, JSON.stringify(mensagens));
+      input.value = '';
+      mostrarMensagens();
+    }
+
+    mostrarMensagens();
+
+  </script>
+</body>
+</html>
