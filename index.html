@@ -1,235 +1,78 @@
-!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Login & Cadastro</title>
-<style>
-  body, html {
-    height: 100%;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #1E3A8A;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #333;
-  }
-  .container {
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px 30px;
-    width: 320px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  }
-  h2 {
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  label {
-    font-weight: bold;
-    font-size: 13px;
-  }
-  input, select, button {
-    width: 100%;
-    margin: 8px 0 15px 0;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-  button {
-    background: #6C63FF;
-    color: white;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  button:hover {
-    background: #574ef6;
-  }
-  .toggle-link {
-    color: #1E3A8A;
-    text-align: center;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 13px;
-    margin-top: -10px;
-  }
-  .error-msg {
-    color: red;
-    font-size: 13px;
-    margin-bottom: 10px;
-    text-align: center;
-    display: none;
-  }
-  .forgot-password {
-    text-align: right;
-    color: #1E3A8A;
-    font-size: 12px;
-    cursor: pointer;
-    margin-bottom: 10px;
-    text-decoration: underline;
-  }
-  /* Botão voltar (diferente estilo) */
-  #back-to-login {
-    background: #ccc;
-    color: #333;
-    margin-top: -10px;
-  }
-  #back-to-login:hover {
-    background: #aaa;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>Entre Alunos - Calendário Visual</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="container" id="login-container">
-  <h2>Login</h2>
-  <div class="error-msg" id="login-error"></div>
-  <form id="login-form" autocomplete="off">
-    <label for="login-email">Email</label>
-    <input type="email" id="login-email" name="email" placeholder="Digite seu e-mail" required />
-    <label for="login-password">Senha</label>
-    <input type="password" id="login-password" name="password" placeholder="••••••••" required />
-    <div class="forgot-password" id="forgot-password-link">Esqueceu a senha?</div>
-    <button type="submit">Entrar</button>
-  </form>
-  <div class="toggle-link" id="go-to-register">Não tem uma conta? Cadastre-se</div>
-</div>
+  <nav>
+    <ul>
+      <li><a href="#" data-sec="forum" class="active">Fórum</a></li>
+      <li><a href="#" data-sec="calendario">Calendário</a></li>
+      <li><a href="#" data-sec="chapa">Chapa</a></li>
+    </ul>
+  </nav>
 
-<div class="container" id="register-container" style="display:none;">
-  <h2>Cadastro</h2>
-  <div class="error-msg" id="register-error"></div>
-  <form id="register-form" autocomplete="off">
-    <label for="name">Nome</label>
-    <input type="text" id="name" name="name" placeholder="Seu nome completo" required />
-    <label for="birthdate">Data de nascimento</label>
-    <input type="date" id="birthdate" name="birthdate" required />
-    <label for="register-email">Email</label>
-    <input type="email" id="register-email" name="email" placeholder="Digite seu e-mail" required />
-    <label for="gender">Gênero</label>
-    <select id="gender" name="gender" required>
-      <option value="" disabled selected>Selecione</option>
-      <option value="Feminino">Feminino</option>
-      <option value="Masculino">Masculino</option>
-      <option value="Prefiro não dizer">Prefiro não dizer</option>
-    </select>
-    <label for="register-password">Senha</label>
-    <input type="password" id="register-password" name="password" placeholder="••••••••" required />
-    <button type="submit">Cadastrar</button>
-    <button type="button" id="back-to-login">Voltar para login</button>
-  </form>
-</div>
+  <header>Entre Alunos</header>
 
-<script>
-  // Alternar entre login e cadastro
-  const loginContainer = document.getElementById('login-container');
-  const registerContainer = document.getElementById('register-container');
- 
-  document.getElementById('go-to-register').onclick = () => {
-    loginContainer.style.display = 'none';
-    registerContainer.style.display = 'block';
-    clearErrors();
-  };
- 
-  document.getElementById('back-to-login').onclick = () => {
-    registerContainer.style.display = 'none';
-    loginContainer.style.display = 'block';
-    clearErrors();
-  };
+  <main>
+    <div id="forum" class="section active">
+      <div class="chat-container">
+        <div class="chat-header" id="chatTitulo">Fórum Geral</div>
+        <div class="chat-messages" id="chatBox"></div>
+        <div class="chat-input">
+          <input type="text" id="mensagemInput" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter') enviarMensagem()">
+          <button onclick="enviarMensagem()">➤</button>
+        </div>
+      </div>
+    </div>
 
-  function clearErrors() {
-    document.getElementById('login-error').style.display = 'none';
-    document.getElementById('register-error').style.display = 'none';
-  }
+    <div id="calendario" class="section">
+      <h2>📅 Calendário Visual</h2>
 
-  // Salvar usuário no localStorage
-  function salvarUsuario(usuario) {
-    let usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    if (usuarios.some(u => u.email.toLowerCase() === usuario.email.toLowerCase())) return false;
-    usuarios.push(usuario);
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-    return true;
-  }
+      <div id="calendarioVisual">
+        <header>
+          <button id="prevMonth" title="Mês anterior">&lt;</button>
+          <h2 id="mesAno"></h2>
+          <button id="nextMonth" title="Próximo mês">&gt;</button>
+        </header>
+        <table class="calendar">
+          <thead>
+            <tr>
+              <th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th>
+            </tr>
+          </thead>
+          <tbody id="corpoCalendario"></tbody>
+        </table>
+      </div>
+    </div>
 
-  // Validar login
-  function validarLogin(email, senha) {
-    let usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    return usuarios.find(u => u.email.toLowerCase() === email.toLowerCase() && u.senha === senha);
-  }
+    <div id="chapa" class="section">
+      <h2>🏛️ Chapa</h2>
+      <p>Conheça as chapas concorrentes e suas propostas.</p>
+    </div>
+  </main>
 
-  // Cadastro
-  document.getElementById('register-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    clearErrors();
+  <div id="modalEvento">
+    <div class="modal-content">
+      <h3>Adicionar Evento</h3>
+      <form id="formAddEvento">
+        <label for="tituloEventoModal">Título do Evento:</label>
+        <input type="text" id="tituloEventoModal" required placeholder="Ex: Reunião, Prova...">
 
-    const nome = this.name.value.trim();
-    const nascimento = this.birthdate.value;
-    const email = this.email.value.trim();
-    const genero = this.gender.value;
-    const senha = this.password.value;
+        <label for="horaEventoModal">Hora:</label>
+        <input type="time" id="horaEventoModal" required>
 
-    const errorDiv = document.getElementById('register-error');
+        <div style="text-align: right;">
+          <button type="submit">Salvar</button>
+          <button type="button" class="cancel">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-    if (!nome || !nascimento || !email || !genero || !senha) {
-      errorDiv.textContent = 'Por favor, preencha todos os campos.';
-      errorDiv.style.display = 'block';
-      return;
-    }
-
-    const usuario = { nome, nascimento, email, genero, senha };
-
-    if (!salvarUsuario(usuario)) {
-      errorDiv.textContent = 'E-mail já cadastrado.';
-      errorDiv.style.display = 'block';
-      return;
-    }
-
-    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-    alert('Cadastro realizado com sucesso!');
-    window.location.href = 'home.html'; // Redireciona para home.html
-  });
-
-  // Login
-  document.getElementById('login-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    clearErrors();
-
-    const email = this.email.value.trim();
-    const senha = this.password.value;
-    const errorDiv = document.getElementById('login-error');
-
-    const usuario = validarLogin(email, senha);
-
-    if (!usuario) {
-      errorDiv.textContent = 'Email ou senha incorretos.';
-      errorDiv.style.display = 'block';
-      return;
-    }
-
-    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-    alert('Login realizado com sucesso!');
-    window.location.href = 'home.html'; // Redireciona para home.html
-  });
-
-  // Esqueci a senha
-  document.getElementById('forgot-password-link').addEventListener('click', () => {
-    const email = prompt('Digite seu e-mail para recuperar a senha:');
-    if (!email) return alert('E-mail não informado.');
-
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    const usuario = usuarios.find(u => u.email.toLowerCase() === email.toLowerCase());
-
-    if (!usuario) {
-      alert('E-mail não cadastrado.');
-      return;
-    }
-
-    alert(`Sua senha é: ${usuario.senha}`);
-  });
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
