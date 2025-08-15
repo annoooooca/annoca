@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Entre Alunos - Calendário Visual</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><a href="#" data-sec="forum" class="active">Fórum</a></li>
+      <li><a href="#" data-sec="calendario">Calendário</a></li>
+      <li><a href="#" data-sec="chapa">Chapa</a></li>
+    </ul>
+  </nav>
+
+  <header>Entre Alunos</header>
+
+  <main>
+    <div id="forum" class="section active">
+      <div class="chat-container">
+        <div class="chat-header" id="chatTitulo">Fórum Geral</div>
+        <div class="chat-messages" id="chatBox" style="height: 450px;"></div>
+        <div class="chat-input">
+          <input
+            type="text"
+            id="mensagemInput"
+            placeholder="Digite sua mensagem..."
+            onkeydown="if(event.key==='Enter') enviarMensagem()"
+          />
+          <button onclick="enviarMensagem()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="calendario" class="section">
+      <h2>📅 Calendário Visual</h2>
+
+      <div id="calendarioVisual">
+        <header>
+          <h2 id="mesAno"></h2>
+        </header>
+        <div class="month-controls">
+          <button id="prevMonth" title="Mês anterior">&lt;</button>
+          <button id="nextMonth" title="Próximo mês">&gt;</button>
+        </div>
+        <table class="calendar">
+          <thead>
+            <tr>
+              <th>Dom</th>
+              <th>Seg</th>
+              <th>Ter</th>
+              <th>Qua</th>
+              <th>Qui</th>
+              <th>Sex</th>
+              <th>Sáb</th>
+            </tr>
+          </thead>
+          <tbody id="corpoCalendario"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="chapa" class="section">
+      <h2>🏛️ Chapa</h2>
+      <p>Conheça as chapas concorrentes e suas propostas.</p>
+    </div>
+  </main>
+
+  <div id="modalEvento">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3 id="modalTitle">Adicionar Evento</h3>
+      <p id="modalDate"></p>
+      <form id="formAddEvento">
+        <label for="tituloEventoModal">Título do Evento:</label>
+        <input
+          type="text"
+          id="tituloEventoModal"
+          required
+          placeholder="Ex: Reunião, Prova..."
+        />
+
+        <label for="tipoEventoModal">Tipo:</label>
+        <select id="tipoEventoModal" required>
+            <option value="reuniao">Reunião</option>
+            <option value="prova">Prova</option>
+            <option value="lembrete">Lembrete</option>
+            <option value="outro">Outro</option>
+        </select>
+
+        <label for="horaEventoModal">Hora:</label>
+        <input type="time" id="horaEventoModal" required />
+
+        <div class="modal-buttons">
+          <button type="submit" id="btnSalvar">Salvar</button>
+          <button type="button" class="cancel">Cancelar</button>
+          <button type="button" id="btnExcluir" style="display: none;">Excluir</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
